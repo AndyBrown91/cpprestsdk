@@ -65,7 +65,7 @@ typedef void* native_handle;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wconversion"
 #endif
-#include "boost/asio/ssl.hpp"
+#include <asio/ssl.hpp>
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
@@ -344,8 +344,8 @@ public:
     ///     Windows Desktop, WinHTTP - HINTERNET
     ///     Windows Runtime, WinRT - IXMLHTTPRequest2 *
     ///     All other platforms, Boost.Asio:
-    ///         https - boost::asio::ssl::stream<boost::asio::ip::tcp::socket &> *
-    ///         http - boost::asio::ip::tcp::socket *
+    ///         https - asio::ssl::stream<asio::ip::tcp::socket &> *
+    ///         http - asio::ip::tcp::socket *
     /// </remarks>
     /// <param name="callback">A user callback allowing for customization of the request</param>
     void set_nativehandle_options(const std::function<void(native_handle)>& callback)
@@ -368,7 +368,7 @@ public:
     /// </summary>
     /// <param name="callback">A user callback allowing for customization of the ssl context at construction
     /// time.</param>
-    void set_ssl_context_callback(const std::function<void(boost::asio::ssl::context&)>& callback)
+    void set_ssl_context_callback(const std::function<void(asio::ssl::context&)>& callback)
     {
         m_ssl_context_callback = callback;
     }
@@ -376,7 +376,7 @@ public:
     /// <summary>
     /// Gets the user's callback to allow for customization of the ssl context.
     /// </summary>
-    const std::function<void(boost::asio::ssl::context&)>& get_ssl_context_callback() const
+    const std::function<void(asio::ssl::context&)>& get_ssl_context_callback() const
     {
         return m_ssl_context_callback;
     }
@@ -420,7 +420,7 @@ private:
     std::function<void(native_handle)> m_set_user_nativesessionhandle_options;
 
 #if !defined(_WIN32) && !defined(__cplusplus_winrt) || defined(CPPREST_FORCE_HTTP_CLIENT_ASIO)
-    std::function<void(boost::asio::ssl::context&)> m_ssl_context_callback;
+    std::function<void(asio::ssl::context&)> m_ssl_context_callback;
     bool m_tlsext_sni_enabled;
 #endif
 #if (defined(_WIN32) && !defined(__cplusplus_winrt)) || defined(CPPREST_FORCE_HTTP_CLIENT_WINHTTPPAL)

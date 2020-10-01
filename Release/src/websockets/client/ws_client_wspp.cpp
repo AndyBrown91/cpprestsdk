@@ -189,27 +189,27 @@ public:
             // Options specific to TLS client.
             auto& client = m_client->client<websocketpp::config::asio_tls_client>();
             client.set_tls_init_handler([this](websocketpp::connection_hdl) {
-                auto sslContext = websocketpp::lib::shared_ptr<boost::asio::ssl::context>(
-                    new boost::asio::ssl::context(boost::asio::ssl::context::sslv23));
+                auto sslContext = websocketpp::lib::shared_ptr<asio::ssl::context>(
+                    new asio::ssl::context(asio::ssl::context::sslv23));
                 sslContext->set_default_verify_paths();
-                sslContext->set_options(boost::asio::ssl::context::default_workarounds);
+                sslContext->set_options(asio::ssl::context::default_workarounds);
                 if (m_config.get_ssl_context_callback())
                 {
                     m_config.get_ssl_context_callback()(*sslContext);
                 }
                 if (m_config.validate_certificates())
                 {
-                    sslContext->set_verify_mode(boost::asio::ssl::context::verify_peer);
+                    sslContext->set_verify_mode(asio::ssl::context::verify_peer);
                 }
                 else
                 {
-                    sslContext->set_verify_mode(boost::asio::ssl::context::verify_none);
+                    sslContext->set_verify_mode(asio::ssl::context::verify_none);
                 }
 
 #ifdef CPPREST_PLATFORM_ASIO_CERT_VERIFICATION_AVAILABLE
                 m_openssl_failed = false;
 #endif
-                sslContext->set_verify_callback([this](bool preverified, boost::asio::ssl::verify_context& verifyCtx) {
+                sslContext->set_verify_callback([this](bool preverified, asio::ssl::verify_context& verifyCtx) {
 #ifdef CPPREST_PLATFORM_ASIO_CERT_VERIFICATION_AVAILABLE
                     // Attempt to use platform certificate validation when it is available:
                     // If OpenSSL fails we will doing verification at the end using the whole certificate chain,
@@ -225,7 +225,7 @@ public:
                             verifyCtx, utility::conversions::to_utf8string(m_uri.host()));
                     }
 #endif
-                    boost::asio::ssl::rfc2818_verification rfc2818(utility::conversions::to_utf8string(m_uri.host()));
+                    asio::ssl::rfc2818_verification rfc2818(utility::conversions::to_utf8string(m_uri.host()));
                     return rfc2818(preverified, verifyCtx);
                 });
 
@@ -244,7 +244,7 @@ public:
 
             // Options specific to underlying socket.
             client.set_socket_init_handler([this](websocketpp::connection_hdl,
-                                                  boost::asio::ssl::stream<boost::asio::ip::tcp::socket>& ssl_stream) {
+                                                  asio::ssl::stream<asio::ip::tcp::socket>& ssl_stream) {
                 // Support for SNI.
                 if (m_config.is_sni_enabled())
                 {
