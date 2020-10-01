@@ -19,7 +19,7 @@
 
 #include "cpprest/details/fileio.h"
 
-using namespace boost::asio;
+using namespace asio;
 using namespace Concurrency::streams::details;
 
 namespace Concurrency

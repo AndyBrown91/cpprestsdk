@@ -185,7 +185,7 @@ public:
     /// </summary>
     /// <param name="callback">A user callback allowing for customization of the ssl context at construction
     /// time.</param>
-    void set_ssl_context_callback(const std::function<void(boost::asio::ssl::context&)>& callback)
+    void set_ssl_context_callback(const std::function<void(asio::ssl::context&)>& callback)
     {
         m_ssl_context_callback = callback;
     }
@@ -193,7 +193,7 @@ public:
     /// <summary>
     /// Gets the user's callback to allow for customization of the ssl context.
     /// </summary>
-    const std::function<void(boost::asio::ssl::context&)>& get_ssl_context_callback() const
+    const std::function<void(asio::ssl::context&)>& get_ssl_context_callback() const
     {
         return m_ssl_context_callback;
     }
@@ -207,7 +207,7 @@ private:
     utf8string m_sni_hostname;
     bool m_validate_certificates;
 #if !defined(_WIN32) || !defined(__cplusplus_winrt)
-    std::function<void(boost::asio::ssl::context&)> m_ssl_context_callback;
+    std::function<void(asio::ssl::context&)> m_ssl_context_callback;
 #endif
 };
 
