@@ -43,7 +43,7 @@ namespace details
 {
 static bool verify_X509_cert_chain(const std::vector<std::string>& certChain, const std::string& hostName);
 
-bool verify_cert_chain_platform_specific(boost::asio::ssl::verify_context& verifyCtx, const std::string& hostName)
+bool verify_cert_chain_platform_specific(asio::ssl::verify_context& verifyCtx, const std::string& hostName)
 {
     X509_STORE_CTX* storeContext = verifyCtx.native_handle();
     int currentDepth = X509_STORE_CTX_get_error_depth(storeContext);
@@ -95,7 +95,7 @@ bool verify_cert_chain_platform_specific(boost::asio::ssl::verify_context& verif
 #if defined(_WIN32)
     if (verify_result)
     {
-        boost::asio::ssl::rfc2818_verification rfc2818(hostName);
+        asio::ssl::rfc2818_verification rfc2818(hostName);
         verify_result = rfc2818(verify_result, verifyCtx);
     }
 #endif
